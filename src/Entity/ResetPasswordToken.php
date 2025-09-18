@@ -2,14 +2,15 @@
 
 namespace App\Entity;
 
+use App\Repository\ResetPasswordTokenRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\UserEmailVerificationTokenRepository;
 
-#[ORM\Entity(repositoryClass: UserEmailVerificationTokenRepository::class)]
-#[ORM\Table(name: 'user_email_verification_tokens')]
-#[ORM\Index(name: 'idx_verification_user', columns: ['user_id'])]
-class UserEmailVerificationToken
+#[ORM\Entity(repositoryClass: ResetPasswordTokenRepository::class)]
+#[ORM\Table(name: 'reset_password_tokens')]
+#[ORM\UniqueConstraint(name: 'uniq_reset_password_hash', columns: ['token_hash'])]
+#[ORM\Index(name: 'idx_reset_password_expires_at', columns: ['expires_at'])]
+class ResetPasswordToken
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -17,20 +18,20 @@ class UserEmailVerificationToken
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     private ?string $id = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'emailVerificationTokens')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private User $user;
 
-    #[ORM\Column(type: 'string', length: 128, unique: true)]
+    #[ORM\Column(name: 'token_hash', type: 'string', length: 128, unique: true)]
     private string $tokenHash;
 
-    #[ORM\Column(type: 'datetimetz_immutable')]
+    #[ORM\Column(name: 'expires_at', type: 'datetimetz_immutable')]
     private DateTimeImmutable $expiresAt;
 
-    #[ORM\Column(type: 'datetimetz_immutable')]
+    #[ORM\Column(name: 'created_at', type: 'datetimetz_immutable')]
     private DateTimeImmutable $createdAt;
 
-    #[ORM\Column(type: 'datetimetz_immutable', nullable: true)]
+    #[ORM\Column(name: 'consumed_at', type: 'datetimetz_immutable', nullable: true)]
     private ?DateTimeImmutable $consumedAt = null;
 
     public function __construct(User $user, string $tokenHash, DateTimeImmutable $expiresAt)
@@ -56,19 +57,14 @@ class UserEmailVerificationToken
         return $this->tokenHash;
     }
 
-    public function matches(string $token): bool
-    {
-        return hash_equals($this->tokenHash, self::hashToken($token));
-    }
-
     public function getExpiresAt(): DateTimeImmutable
     {
         return $this->expiresAt;
     }
 
-    public function isExpired(): bool
+    public function isExpired(DateTimeImmutable $now = new DateTimeImmutable()): bool
     {
-        return $this->expiresAt <= new DateTimeImmutable();
+        return $this->expiresAt <= $now;
     }
 
     public function getConsumedAt(): ?DateTimeImmutable
@@ -84,10 +80,5 @@ class UserEmailVerificationToken
     public function markConsumed(): void
     {
         $this->consumedAt = new DateTimeImmutable();
-    }
-
-    public static function hashToken(string $token): string
-    {
-        return hash('sha256', $token);
     }
 }

@@ -29,6 +29,7 @@
         "symfony/flex": "^2",
         "symfony/framework-bundle": "7.3.*",
         "symfony/http-client": "7.3.*",
+        "symfony/mailer": "7.3.*",
         "symfony/monolog-bundle": "^3.10",
         "symfony/property-access": "7.3.*",
         "symfony/property-info": "7.3.*",
@@ -52,7 +53,10 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/"
-        }
+        },
+        "files": [
+            "src/Enum/Enums.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -93,6 +97,9 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^4.1",
+        "phpunit/phpunit": "^12.3",
+        "symfony/browser-kit": "7.3.*",
+        "symfony/css-selector": "7.3.*",
         "symfony/maker-bundle": "^1.64"
     }
 }

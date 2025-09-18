@@ -2,26 +2,24 @@
 
 namespace App\Repository;
 
+use App\Entity\ResetPasswordToken;
 use App\Entity\User;
-use App\Entity\UserEmailVerificationToken;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<UserEmailVerificationToken>
+ * @extends ServiceEntityRepository<ResetPasswordToken>
  */
-class UserEmailVerificationTokenRepository extends ServiceEntityRepository
+class ResetPasswordTokenRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, UserEmailVerificationToken::class);
+        parent::__construct($registry, ResetPasswordToken::class);
     }
 
-    public function findValidToken(string $plainToken): ?UserEmailVerificationToken
+    public function findValidByHash(string $hash): ?ResetPasswordToken
     {
-        $hash = UserEmailVerificationToken::hashToken($plainToken);
-
         return $this->createQueryBuilder('token')
             ->andWhere('token.tokenHash = :hash')
             ->andWhere('token.expiresAt > :now')
@@ -32,22 +30,22 @@ class UserEmailVerificationTokenRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function purgeExpired(): int
-    {
-        return $this->createQueryBuilder('token')
-            ->delete()
-            ->where('token.expiresAt <= :now')
-            ->setParameter('now', new DateTimeImmutable())
-            ->getQuery()
-            ->execute();
-    }
-
     public function revokeAllForUser(User $user): int
     {
         return $this->createQueryBuilder('token')
             ->delete()
             ->where('token.user = :user')
             ->setParameter('user', $user)
+            ->getQuery()
+            ->execute();
+    }
+
+    public function purgeExpired(): int
+    {
+        return $this->createQueryBuilder('token')
+            ->delete()
+            ->where('token.expiresAt <= :now')
+            ->setParameter('now', new DateTimeImmutable())
             ->getQuery()
             ->execute();
     }

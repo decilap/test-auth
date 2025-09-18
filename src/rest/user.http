@@ -7,7 +7,7 @@ Content-Type: application/ld+json
 
 {
   "email": "utilisateur_test@loveconnect.com",
-  "password": "Martinique-/po92"
+  "password": "Martinique-/po93"
 }
 
 ### user refresh
@@ -15,17 +15,37 @@ POST https://localhost/v1/api/refresh/token
 Content-Type: application/ld+json
 
 {
-  "refresh_token": "0b961d8db51d959407f54df764406c54b7e2c8f74fc9edb088f12dc0554e24b81f49b82b7fce5ad2a2de9aab1bcc8daa75ab35f60dc04ac6a5a66f9bca4827c6"
+  "refresh_token": "2bb4e8fffd0ae61e873c8a63a63d2aceacda6f7356ae0c5c4e15c2ea9d0f49c4ba32e164b10885746e32515374a4c8f507e2bade1e5175b76dd55e994de3af84"
 }
 
 ### user email verify
-POST https://localhost/v1/api/email/verify
+GET https://localhost/v1/api/email/verify?token=NUsWZVxwwui4ZOeDIPMCw9O7pUghcYD1hfXWV7U1V9Y
+
+### user email resend
+POST https://localhost/v1/api/email/resend
 Content-Type: application/json
 
 {
-  "token": "TOKEN_A_RECUPERER_PAR_EMAIL"
+  "email": "utilisateur_test@loveconnect.com"
 }
-###190e7c47b4388452c44b0fce14c1b23aa1e4e84ba637004590bf2af689abc467
+
+### password reset request
+POST https://localhost/v1/api/password/reset/request
+Content-Type: application/json
+
+{
+  "email": "utilisateur_test@loveconnect.com"
+}
+
+### password reset confirm
+POST https://localhost/v1/api/password/reset/confirm
+Content-Type: application/json
+
+{
+  "token": "dRzle3Vsyfuq0U9OTlTL0sHvjNCVV1yyWFoFExjrPhc",
+  "password": "Martinique-/po93"
+}
+
 ### user all
 
 get https://localhost/api/users
@@ -37,10 +57,8 @@ Content-Type: application/ld+json
 
 {
   "email": "utilisateur_test@loveconnect.com",
-  "plainPassword": "Martinique-/po92",
+  "plainPassword": "Martinique-/po93",
   "username": "mon_nouvel_utilisateur",
-  "verificationLevel": "unverified",
-  "isActive": true,
   "userProfile": {
     "displayName": "Profil de Test",
     "birthdate": "1995-03-20T00:00:00Z",
@@ -72,11 +90,11 @@ Content-Type: application/ld+json
   ],
   "userInterests": [
     {
-      "interest": "/api/interests/01995bf9-a363-7dc3-97c7-1f71ea0da0c7",
+      "interest": "/api/interests/01995dfa-82c2-7f8f-95db-a3e3ca8d8f15",
       "weight": 1
     },
     {
-      "interest": "/api/interests/01995bf9-a363-7dc3-97c7-1f71e7192475",
+      "interest": "/api/interests/01995dfa-82c3-7ec7-9677-a248ea491c1f",
       "weight": 1
     }
   ]

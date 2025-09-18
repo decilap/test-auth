@@ -12,5 +12,20 @@ v1_api_refresh_token:
 
 v1_api_email_verify:
     path: /v1/api/email/verify
-    controller: App\Controller\EmailVerificationController
+    controller: App\Controller\EmailVerificationController::verify
+    methods: [GET, POST]
+
+v1_api_email_resend:
+    path: /v1/api/email/resend
+    controller: App\Controller\EmailVerificationController::resend
+    methods: [POST]
+
+v1_api_password_reset_request:
+    path: /v1/api/password/reset/request
+    controller: App\Controller\PasswordResetController::request
+    methods: [POST]
+
+v1_api_password_reset_confirm:
+    path: /v1/api/password/reset/confirm
+    controller: App\Controller\PasswordResetController::confirm
     methods: [POST]

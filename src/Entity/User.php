@@ -7,7 +7,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Dto\UserInput;
-use App\Entity\UserEmailVerificationToken;
+use App\Entity\EmailVerificationToken;
 use App\Enum\VerificationEnum;
 use App\Repository\UserRepository;
 use App\State\UserPasswordProcessor;
@@ -59,7 +59,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     private ?string $plainPassword = null;
 
-
     #[ORM\Column(type: 'text', options: ['default' => 'argon2id'])]
     private string $passwordAlgo = 'argon2id';
 
@@ -76,16 +75,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $roles;
 
     #[ORM\Column(type: 'string', enumType: VerificationEnum::class, options: ['default' => 'unverified'])]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read'])]
     private VerificationEnum $verificationLevel = VerificationEnum::Unverified;
 
     #[ORM\Column(type: 'datetimetz_immutable', nullable: true)]
     #[Groups(['user:read'])]
     private ?DateTimeImmutable $lastLoginAt = null;
 
-    #[ORM\Column(type: 'boolean', options: ['default' => true])]
-    #[Groups(['user:read', 'user:write'])]
-    private bool $isActive = true;
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    #[Groups(['user:read'])]
+    private bool $isActive = false;
 
     #[ORM\Column(type: 'datetimetz_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
     #[Groups(['user:read'])]
@@ -111,8 +110,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:write'])] // C'est cette ligne qui résout le problème
     private Collection $userInterests;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserEmailVerificationToken::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: EmailVerificationToken::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $emailVerificationTokens;
+
+    #[ORM\Column(type: 'datetimetz_immutable', nullable: true)]
+    #[Groups(['user:read'])]
+    private ?DateTimeImmutable $emailVerifiedAt = null;
 
     public function __construct()
     {
@@ -319,17 +322,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getEmailVerifiedAt(): ?DateTimeImmutable
+    {
+        return $this->emailVerifiedAt;
+    }
+
     public function isEmailVerified(): bool
     {
-        return $this->verificationLevel !== VerificationEnum::Unverified;
+        return null !== $this->emailVerifiedAt;
     }
 
     public function markEmailVerified(): self
     {
         if (!$this->isEmailVerified()) {
+            $this->emailVerifiedAt = new DateTimeImmutable();
             $this->verificationLevel = VerificationEnum::EmailVerified;
+            $this->isActive = true;
             $this->updatedAt = new DateTimeImmutable();
         }
+
+        return $this;
+    }
+
+    public function clearEmailVerifiedAt(): self
+    {
+        $this->emailVerifiedAt = null;
+        $this->verificationLevel = VerificationEnum::Unverified;
+        $this->isActive = false;
+        $this->updatedAt = new DateTimeImmutable();
 
         return $this;
     }
@@ -339,7 +359,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->emailVerificationTokens;
     }
 
-    public function addEmailVerificationToken(UserEmailVerificationToken $token): self
+    public function addEmailVerificationToken(EmailVerificationToken $token): self
     {
         if (!$this->emailVerificationTokens->contains($token)) {
             $this->emailVerificationTokens->add($token);
@@ -348,7 +368,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeEmailVerificationToken(UserEmailVerificationToken $token): self
+    public function removeEmailVerificationToken(EmailVerificationToken $token): self
     {
         $this->emailVerificationTokens->removeElement($token);
 

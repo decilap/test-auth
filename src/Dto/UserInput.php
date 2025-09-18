@@ -21,9 +21,7 @@ class UserInput
     #[Groups(['user:write'])]
     public ?string $plainPassword = null;
 
+    #[Assert\Length(max: 64)]
     #[Groups(['user:write'])]
     public ?string $username = null;
-
-    #[Groups(['user:write'])]
-    public ?bool $isActive = true;
 }

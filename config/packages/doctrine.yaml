@@ -1,6 +1,7 @@
 doctrine:
     dbal:
         url: "%env(resolve:DATABASE_URL)%"
+        schema_filter: '~^(?!spatial_ref_sys|geometry_columns|geography_columns|raster_columns|raster_overviews|topology|tiger|tiger_data).*~'
 
         types:
             geography: 'Jsor\Doctrine\PostGIS\Types\GeographyType'

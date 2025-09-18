@@ -1,0 +1,28 @@
+{% block body %}
+    <p>Bonjour {{ user.userProfile ? user.userProfile.displayName : user.email }},</p>
+
+    <p>Merci de t'être inscrit sur LoveConnect. Pour activer ton compte, clique sur le bouton ci-dessous (valide pendant 20 minutes) :</p>
+
+    <p style="margin: 24px 0; text-align: center;">
+        <a href="{{ verification_url }}" style="background: #ff0077; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold;">Confirmer mon adresse email</a>
+    </p>
+
+    <p>Si le bouton ne fonctionne pas, copie-colle ce lien dans ton navigateur :</p>
+    <p style="word-break: break-all;">{{ verification_url }}</p>
+
+    <p>Si tu n'es pas à l'origine de cette inscription, tu peux ignorer ce message.</p>
+
+    <p>À très vite,<br>L'équipe LoveConnect</p>
+{% endblock %}
+
+{% block text %}
+Bonjour {{ user.userProfile ? user.userProfile.displayName : user.email }},
+
+Merci de t'être inscrit sur LoveConnect. Pour activer ton compte, ouvre ce lien (valide pendant 20 minutes) :
+{{ verification_url }}
+
+Si tu n'es pas à l'origine de cette inscription, ignore ce message.
+
+À très vite,
+L'équipe LoveConnect
+{% endblock %}

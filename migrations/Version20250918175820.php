@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250918142828 extends AbstractMigration
+final class Version20250918175820 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -32,6 +32,15 @@ final class Version20250918142828 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN conversations.match_id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN conversations.created_at IS \'(DC2Type:datetimetz_immutable)\'');
         $this->addSql('COMMENT ON COLUMN conversations.last_msg_at IS \'(DC2Type:datetimetz_immutable)\'');
+        $this->addSql('CREATE TABLE email_verification_tokens (id UUID NOT NULL, user_id UUID NOT NULL, token_hash VARCHAR(128) NOT NULL, expires_at TIMESTAMP(0) WITH TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITH TIME ZONE NOT NULL, consumed_at TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_C81CA2ACA76ED395 ON email_verification_tokens (user_id)');
+        $this->addSql('CREATE INDEX idx_email_verification_expires_at ON email_verification_tokens (expires_at)');
+        $this->addSql('CREATE UNIQUE INDEX uniq_email_verification_hash ON email_verification_tokens (token_hash)');
+        $this->addSql('COMMENT ON COLUMN email_verification_tokens.id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN email_verification_tokens.user_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN email_verification_tokens.expires_at IS \'(DC2Type:datetimetz_immutable)\'');
+        $this->addSql('COMMENT ON COLUMN email_verification_tokens.created_at IS \'(DC2Type:datetimetz_immutable)\'');
+        $this->addSql('COMMENT ON COLUMN email_verification_tokens.consumed_at IS \'(DC2Type:datetimetz_immutable)\'');
         $this->addSql('CREATE TABLE interests (id UUID NOT NULL, name VARCHAR(255) NOT NULL, category VARCHAR(100) DEFAULT NULL, created_at TIMESTAMP(0) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_C8B405EA5E237E06 ON interests (name)');
         $this->addSql('COMMENT ON COLUMN interests.id IS \'(DC2Type:uuid)\'');
@@ -104,6 +113,15 @@ final class Version20250918142828 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN reports.handled_by IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN reports.created_at IS \'(DC2Type:datetimetz_immutable)\'');
         $this->addSql('COMMENT ON COLUMN reports.closed_at IS \'(DC2Type:datetimetz_immutable)\'');
+        $this->addSql('CREATE TABLE reset_password_tokens (id UUID NOT NULL, user_id UUID NOT NULL, token_hash VARCHAR(128) NOT NULL, expires_at TIMESTAMP(0) WITH TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITH TIME ZONE NOT NULL, consumed_at TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_F045D5AAA76ED395 ON reset_password_tokens (user_id)');
+        $this->addSql('CREATE INDEX idx_reset_password_expires_at ON reset_password_tokens (expires_at)');
+        $this->addSql('CREATE UNIQUE INDEX uniq_reset_password_hash ON reset_password_tokens (token_hash)');
+        $this->addSql('COMMENT ON COLUMN reset_password_tokens.id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN reset_password_tokens.user_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN reset_password_tokens.expires_at IS \'(DC2Type:datetimetz_immutable)\'');
+        $this->addSql('COMMENT ON COLUMN reset_password_tokens.created_at IS \'(DC2Type:datetimetz_immutable)\'');
+        $this->addSql('COMMENT ON COLUMN reset_password_tokens.consumed_at IS \'(DC2Type:datetimetz_immutable)\'');
         $this->addSql('CREATE TABLE role (id SERIAL NOT NULL, name VARCHAR(50) NOT NULL, description TEXT DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_57698A6A5E237E06 ON role (name)');
         $this->addSql('CREATE TABLE subscriptions (id UUID NOT NULL, user_id UUID NOT NULL, plan_price_id UUID NOT NULL, stripe_customer_id TEXT DEFAULT NULL, stripe_subscription_id TEXT DEFAULT NULL, status VARCHAR(255) NOT NULL, current_period_start TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL, current_period_end TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL, cancel_at TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL, canceled_at TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL, trial_start TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL, trial_end TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL, started_at TIMESTAMP(0) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at TIMESTAMP(0) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, PRIMARY KEY(id))');
@@ -135,14 +153,6 @@ final class Version20250918142828 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN transactions.user_id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN transactions.subscription_id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN transactions.created_at IS \'(DC2Type:datetimetz_immutable)\'');
-        $this->addSql('CREATE TABLE user_email_verification_tokens (id UUID NOT NULL, user_id UUID NOT NULL, token_hash VARCHAR(128) NOT NULL, expires_at TIMESTAMP(0) WITH TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITH TIME ZONE NOT NULL, consumed_at TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_C4B66C24B3BC57DA ON user_email_verification_tokens (token_hash)');
-        $this->addSql('CREATE INDEX idx_verification_user ON user_email_verification_tokens (user_id)');
-        $this->addSql('COMMENT ON COLUMN user_email_verification_tokens.id IS \'(DC2Type:uuid)\'');
-        $this->addSql('COMMENT ON COLUMN user_email_verification_tokens.user_id IS \'(DC2Type:uuid)\'');
-        $this->addSql('COMMENT ON COLUMN user_email_verification_tokens.expires_at IS \'(DC2Type:datetimetz_immutable)\'');
-        $this->addSql('COMMENT ON COLUMN user_email_verification_tokens.created_at IS \'(DC2Type:datetimetz_immutable)\'');
-        $this->addSql('COMMENT ON COLUMN user_email_verification_tokens.consumed_at IS \'(DC2Type:datetimetz_immutable)\'');
         $this->addSql('CREATE TABLE user_interests (id UUID NOT NULL, user_id UUID NOT NULL, interest_id UUID NOT NULL, weight SMALLINT DEFAULT 1 NOT NULL, created_at TIMESTAMP(0) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_C854880EA76ED395 ON user_interests (user_id)');
         $this->addSql('CREATE INDEX IDX_C854880E5A95FF89 ON user_interests (interest_id)');
@@ -163,7 +173,7 @@ final class Version20250918142828 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN user_profiles.birthdate IS \'(DC2Type:date_immutable)\'');
         $this->addSql('COMMENT ON COLUMN user_profiles.created_at IS \'(DC2Type:datetimetz_immutable)\'');
         $this->addSql('COMMENT ON COLUMN user_profiles.updated_at IS \'(DC2Type:datetimetz_immutable)\'');
-        $this->addSql('CREATE TABLE users (id UUID NOT NULL, email VARCHAR(255) NOT NULL, email_normalized VARCHAR(255) NOT NULL, password TEXT NOT NULL, password_algo TEXT DEFAULT \'argon2id\' NOT NULL, phone_e164 VARCHAR(20) DEFAULT NULL, username VARCHAR(255) DEFAULT NULL, verification_level VARCHAR(255) DEFAULT \'unverified\' NOT NULL, last_login_at TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL, is_active BOOLEAN DEFAULT true NOT NULL, created_at TIMESTAMP(0) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at TIMESTAMP(0) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, deleted_at TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE users (id UUID NOT NULL, email VARCHAR(255) NOT NULL, email_normalized VARCHAR(255) NOT NULL, password TEXT NOT NULL, password_algo TEXT DEFAULT \'argon2id\' NOT NULL, phone_e164 VARCHAR(20) DEFAULT NULL, username VARCHAR(255) DEFAULT NULL, verification_level VARCHAR(255) DEFAULT \'unverified\' NOT NULL, last_login_at TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL, is_active BOOLEAN DEFAULT false NOT NULL, created_at TIMESTAMP(0) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at TIMESTAMP(0) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, deleted_at TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL, email_verified_at TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E9E7927C74 ON users (email)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E9D5AE72C8 ON users (email_normalized)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E9F85E0677 ON users (username)');
@@ -172,6 +182,7 @@ final class Version20250918142828 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN users.created_at IS \'(DC2Type:datetimetz_immutable)\'');
         $this->addSql('COMMENT ON COLUMN users.updated_at IS \'(DC2Type:datetimetz_immutable)\'');
         $this->addSql('COMMENT ON COLUMN users.deleted_at IS \'(DC2Type:datetimetz_immutable)\'');
+        $this->addSql('COMMENT ON COLUMN users.email_verified_at IS \'(DC2Type:datetimetz_immutable)\'');
         $this->addSql('CREATE TABLE user_roles (user_id UUID NOT NULL, role_id INT NOT NULL, PRIMARY KEY(user_id, role_id))');
         $this->addSql('CREATE INDEX IDX_54FCD59FA76ED395 ON user_roles (user_id)');
         $this->addSql('CREATE INDEX IDX_54FCD59FD60322AC ON user_roles (role_id)');
@@ -179,6 +190,7 @@ final class Version20250918142828 extends AbstractMigration
         $this->addSql('ALTER TABLE blocks ADD CONSTRAINT FK_CEED9578C1668098 FOREIGN KEY (blocker_user_id) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE blocks ADD CONSTRAINT FK_CEED95781EBCBB63 FOREIGN KEY (blocked_user_id) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE conversations ADD CONSTRAINT FK_C2521BF12ABEACD6 FOREIGN KEY (match_id) REFERENCES matches (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE email_verification_tokens ADD CONSTRAINT FK_C81CA2ACA76ED395 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE matches ADD CONSTRAINT FK_62615BA415F1F91 FOREIGN KEY (user_a_id) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE matches ADD CONSTRAINT FK_62615BA53EAB07F FOREIGN KEY (user_b_id) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE media_assets ADD CONSTRAINT FK_C5A8E750A76ED395 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -195,13 +207,13 @@ final class Version20250918142828 extends AbstractMigration
         $this->addSql('ALTER TABLE reports ADD CONSTRAINT FK_F11FA745E1CFE6F5 FOREIGN KEY (reporter_id) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE reports ADD CONSTRAINT FK_F11FA745E7566E FOREIGN KEY (reported_user_id) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE reports ADD CONSTRAINT FK_F11FA74553689D12 FOREIGN KEY (handled_by) REFERENCES users (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE reset_password_tokens ADD CONSTRAINT FK_F045D5AAA76ED395 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE subscriptions ADD CONSTRAINT FK_4778A01A76ED395 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE subscriptions ADD CONSTRAINT FK_4778A01D871F09D FOREIGN KEY (plan_price_id) REFERENCES pricing_plan_prices (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE swipes ADD CONSTRAINT FK_B4DF8DAE859B83FF FOREIGN KEY (actor_user_id) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE swipes ADD CONSTRAINT FK_B4DF8DAE6C066AFE FOREIGN KEY (target_user_id) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE transactions ADD CONSTRAINT FK_EAA81A4CA76ED395 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE transactions ADD CONSTRAINT FK_EAA81A4C9A1887DC FOREIGN KEY (subscription_id) REFERENCES subscriptions (id) ON DELETE SET NULL NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('ALTER TABLE user_email_verification_tokens ADD CONSTRAINT FK_C4B66C24A76ED395 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE user_interests ADD CONSTRAINT FK_C854880EA76ED395 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE user_interests ADD CONSTRAINT FK_C854880E5A95FF89 FOREIGN KEY (interest_id) REFERENCES interests (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE user_locations ADD CONSTRAINT FK_1706C75EA76ED395 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -214,9 +226,13 @@ final class Version20250918142828 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
+        $this->addSql('CREATE SCHEMA tiger_data');
+        $this->addSql('CREATE SCHEMA tiger');
+        $this->addSql('CREATE SCHEMA topology');
         $this->addSql('ALTER TABLE blocks DROP CONSTRAINT FK_CEED9578C1668098');
         $this->addSql('ALTER TABLE blocks DROP CONSTRAINT FK_CEED95781EBCBB63');
         $this->addSql('ALTER TABLE conversations DROP CONSTRAINT FK_C2521BF12ABEACD6');
+        $this->addSql('ALTER TABLE email_verification_tokens DROP CONSTRAINT FK_C81CA2ACA76ED395');
         $this->addSql('ALTER TABLE matches DROP CONSTRAINT FK_62615BA415F1F91');
         $this->addSql('ALTER TABLE matches DROP CONSTRAINT FK_62615BA53EAB07F');
         $this->addSql('ALTER TABLE media_assets DROP CONSTRAINT FK_C5A8E750A76ED395');
@@ -233,13 +249,13 @@ final class Version20250918142828 extends AbstractMigration
         $this->addSql('ALTER TABLE reports DROP CONSTRAINT FK_F11FA745E1CFE6F5');
         $this->addSql('ALTER TABLE reports DROP CONSTRAINT FK_F11FA745E7566E');
         $this->addSql('ALTER TABLE reports DROP CONSTRAINT FK_F11FA74553689D12');
+        $this->addSql('ALTER TABLE reset_password_tokens DROP CONSTRAINT FK_F045D5AAA76ED395');
         $this->addSql('ALTER TABLE subscriptions DROP CONSTRAINT FK_4778A01A76ED395');
         $this->addSql('ALTER TABLE subscriptions DROP CONSTRAINT FK_4778A01D871F09D');
         $this->addSql('ALTER TABLE swipes DROP CONSTRAINT FK_B4DF8DAE859B83FF');
         $this->addSql('ALTER TABLE swipes DROP CONSTRAINT FK_B4DF8DAE6C066AFE');
         $this->addSql('ALTER TABLE transactions DROP CONSTRAINT FK_EAA81A4CA76ED395');
         $this->addSql('ALTER TABLE transactions DROP CONSTRAINT FK_EAA81A4C9A1887DC');
-        $this->addSql('ALTER TABLE user_email_verification_tokens DROP CONSTRAINT FK_C4B66C24A76ED395');
         $this->addSql('ALTER TABLE user_interests DROP CONSTRAINT FK_C854880EA76ED395');
         $this->addSql('ALTER TABLE user_interests DROP CONSTRAINT FK_C854880E5A95FF89');
         $this->addSql('ALTER TABLE user_locations DROP CONSTRAINT FK_1706C75EA76ED395');
@@ -248,6 +264,7 @@ final class Version20250918142828 extends AbstractMigration
         $this->addSql('ALTER TABLE user_roles DROP CONSTRAINT FK_54FCD59FD60322AC');
         $this->addSql('DROP TABLE blocks');
         $this->addSql('DROP TABLE conversations');
+        $this->addSql('DROP TABLE email_verification_tokens');
         $this->addSql('DROP TABLE interests');
         $this->addSql('DROP TABLE matches');
         $this->addSql('DROP TABLE media_assets');
@@ -260,11 +277,11 @@ final class Version20250918142828 extends AbstractMigration
         $this->addSql('DROP TABLE profile_photos');
         $this->addSql('DROP TABLE refresh_tokens');
         $this->addSql('DROP TABLE reports');
+        $this->addSql('DROP TABLE reset_password_tokens');
         $this->addSql('DROP TABLE role');
         $this->addSql('DROP TABLE subscriptions');
         $this->addSql('DROP TABLE swipes');
         $this->addSql('DROP TABLE transactions');
-        $this->addSql('DROP TABLE user_email_verification_tokens');
         $this->addSql('DROP TABLE user_interests');
         $this->addSql('DROP TABLE user_locations');
         $this->addSql('DROP TABLE user_profiles');
