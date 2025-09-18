@@ -40,6 +40,14 @@ services:
       start_period: 60s
     volumes:
       - database_data:/var/lib/postgresql/data:rw
+
+  mail:
+      image: mailhog/mailhog
+      container_name: mailhog
+      ports:
+        - "1025:1025" # SMTP
+        - "8025:8025" # UI Web
+
 ###< doctrine/doctrine-bundle ###
 
 volumes:

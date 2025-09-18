@@ -7,7 +7,7 @@ Content-Type: application/ld+json
 
 {
   "email": "utilisateur_test@loveconnect.com",
-  "password": "mot_de_passe_hash_securise"
+  "password": "Martinique-/po92"
 }
 
 ### user refresh
@@ -25,7 +25,7 @@ Content-Type: application/json
 {
   "token": "TOKEN_A_RECUPERER_PAR_EMAIL"
 }
-
+###190e7c47b4388452c44b0fce14c1b23aa1e4e84ba637004590bf2af689abc467
 ### user all
 
 get https://localhost/api/users
@@ -37,7 +37,7 @@ Content-Type: application/ld+json
 
 {
   "email": "utilisateur_test@loveconnect.com",
-  "plainPassword": "mot_de_passe_hash_securise",
+  "plainPassword": "Martinique-/po92",
   "username": "mon_nouvel_utilisateur",
   "verificationLevel": "unverified",
   "isActive": true,

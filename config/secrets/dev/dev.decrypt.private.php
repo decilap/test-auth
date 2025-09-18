@@ -1,0 +1,4 @@
+<?php // dev.decrypt.private on Thu, 18 Sep 2025 15:06:12 +0000
+
+// SYMFONY_DECRYPTION_SECRET=a9T3a0dyNC5V/JROdZnVQc88pAJO1Fhh4JHb/o03c+8LicB2NApXtTMV1/EL0YKNbE/kXC1sR/pXAakAfBFoEA==
+return "k\xD4\xF7kGr4.U\xFC\x94Nu\x99\xD5A\xCF\x3C\xA4\x02N\xD4Xa\xE0\x91\xDB\xFE\x8D7s\xEF\x0B\x89\xC0v4\x0AW\xB53\x15\xD7\xF1\x0B\xD1\x82\x8DlO\xE4\x5C-lG\xFAW\x01\xA9\x00\x7C\x11h\x10";
