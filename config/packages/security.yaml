@@ -1,0 +1,54 @@
+security:
+    password_hashers:
+        App\Entity\User:
+            algorithm: argon2id
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        login:
+            pattern: ^/v1/api/login
+            stateless: true
+            login_throttling:
+                max_attempts: 5
+                interval: '1 minute'
+            json_login:
+                username_path: email
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+                check_path: /v1/api/login
+            user_checker: 'App\Security\UserAccountChecker'
+
+        api:
+            pattern: ^/v1/api
+            stateless: true
+            jwt: ~
+            refresh_jwt:
+                check_path: /v1/api/refresh/token
+            entry_point: jwt
+            user_checker: 'App\Security\UserAccountChecker'
+
+    access_control:
+        - { path: ^/v1/api/users, methods: [POST], roles: PUBLIC_ACCESS }
+        - { path: ^/v1/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/v1/api/refresh/token, roles: PUBLIC_ACCESS }
+        - { path: ^/v1/api/email/verify, roles: PUBLIC_ACCESS }
+        - { path: ^/v1/api, roles: IS_AUTHENTICATED_FULLY }
+
+when@test:
+    security:
+        password_hashers:
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4
+                time_cost: 3
+                memory_cost: 10

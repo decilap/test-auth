@@ -1,0 +1,33 @@
+monolog:
+    channels: ["api_platform", "security", "audit"]
+
+    handlers:
+        main:
+            type: stream
+            path: "php://stdout"
+            level: info
+            channels: ["!event", "!security", "!doctrine", "!audit"]
+
+        doctrine:
+            type: stream
+            path: "%kernel.logs_dir%/doctrine.log"
+            level: info
+            channels: ["doctrine"]
+
+        api_platform:
+            type: stream
+            path: "%kernel.logs_dir%/api_platform.log"
+            level: info
+            channels: ["api_platform"]
+
+        security:
+            type: stream
+            path: "%kernel.logs_dir%/security.log"
+            level: notice
+            channels: ["security"]
+
+        audit:
+            type: stream
+            path: "%kernel.logs_dir%/audit.log"
+            level: info
+            channels: ["audit"]

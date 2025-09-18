@@ -1,0 +1,16 @@
+_security_logout:
+    resource: security.route_loader.logout
+    type: service
+
+v1_api_login:
+    path: /v1/api/login
+    methods: [POST]
+
+v1_api_refresh_token:
+    path: /v1/api/refresh/token
+    methods: [POST]
+
+v1_api_email_verify:
+    path: /v1/api/email/verify
+    controller: App\Controller\EmailVerificationController
+    methods: [POST]

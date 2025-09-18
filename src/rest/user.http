@@ -1,0 +1,83 @@
+
+
+### user login
+
+POST https://localhost/v1/api/login
+Content-Type: application/ld+json
+
+{
+  "email": "utilisateur_test@loveconnect.com",
+  "password": "mot_de_passe_hash_securise"
+}
+
+### user refresh
+POST https://localhost/v1/api/refresh/token
+Content-Type: application/ld+json
+
+{
+  "refresh_token": "0b961d8db51d959407f54df764406c54b7e2c8f74fc9edb088f12dc0554e24b81f49b82b7fce5ad2a2de9aab1bcc8daa75ab35f60dc04ac6a5a66f9bca4827c6"
+}
+
+### user email verify
+POST https://localhost/v1/api/email/verify
+Content-Type: application/json
+
+{
+  "token": "TOKEN_A_RECUPERER_PAR_EMAIL"
+}
+
+### user all
+
+get https://localhost/api/users
+Content-Type: application/ld+json
+
+### user create
+POST https://localhost/api/users
+Content-Type: application/ld+json
+
+{
+  "email": "utilisateur_test@loveconnect.com",
+  "plainPassword": "mot_de_passe_hash_securise",
+  "username": "mon_nouvel_utilisateur",
+  "verificationLevel": "unverified",
+  "isActive": true,
+  "userProfile": {
+    "displayName": "Profil de Test",
+    "birthdate": "1995-03-20T00:00:00Z",
+    "gender": "male",
+    "orientation": "straight",
+    "bio": "Ceci est une biographie de test pour le nouvel utilisateur.",
+    "jobTitle": "Développeur Symfony",
+    "company": "LoveConnect",
+    "education": "Master en informatique",
+    "heightCm": 185,
+    "lifestyleJson": [
+      "sport",
+      "musique"
+    ],
+    "preferencesJson": [
+      "cinema",
+      "lecture"
+    ],
+    "visibility": "everyone",
+    "photoVerification": false,
+    "locationAccuracyM": 50
+  },
+  "userLocations": [
+     {
+      "latitude": 48.8566,
+      "longitude": 2.3522,
+      "geohash": "u09tvm"
+    }
+  ],
+  "userInterests": [
+    {
+      "interest": "/api/interests/01995bf9-a363-7dc3-97c7-1f71ea0da0c7",
+      "weight": 1
+    },
+    {
+      "interest": "/api/interests/01995bf9-a363-7dc3-97c7-1f71e7192475",
+      "weight": 1
+    }
+  ]
+}

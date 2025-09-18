@@ -1,0 +1,6 @@
+gesdinet_jwt_refresh_token:
+    refresh_token_class: App\Entity\RefreshToken
+    ttl: 2592000 # 30 jours
+    firewall: api
+    token_parameter_name: refresh_token
+    # route_name: v1_api_refresh_token # 👈 important pour utiliser ta route /v1/api/refresh/token
